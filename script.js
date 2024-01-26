@@ -109,4 +109,33 @@ function saveToLocalStorage() {
   localStorage.setItem("todo", JSON.stringify(todo));
 }
 
+
+function displayTasks() {
+    todoList.innerHTML = "";
+    todo.forEach((item, index) => {
+      const p = document.createElement("p");
+      p.innerHTML = `
+        <div class="todo-container">
+          <input type="checkbox" class="todo-checkbox"
+            id="input-${index}" ${item.disabled ? "checked" : ""}>
+          <p id="todo-${index}" class="${
+            item.disabled ? "disabled" : ""
+          }">${item.text}</p>
+          <span class="delete-icon" onclick="deleteTask(${index})">&#128465;</span>
+        </div>
+      `;
+      p.querySelector(".todo-checkbox").addEventListener("change", () => {
+        toogleTask(index);
+      });
+      todoList.appendChild(p);
+    });
+    todoCount.textContent = todo.length;
+  }
+  
+  function deleteTask(index) {
+    todo.splice(index, 1);
+    saveToLocalStorage();
+    displayTasks();
+  }
+
 // console.log(todoInput);

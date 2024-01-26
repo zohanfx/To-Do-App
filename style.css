@@ -217,3 +217,11 @@ input[type="checkbox"]:checked::before {
     display: none;
 }
 
+.delete-icon {
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.delete-icon:hover {
+  color: red;
+}
