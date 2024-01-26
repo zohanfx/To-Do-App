@@ -51,44 +51,58 @@ function displayTasks() {
     }" onclick="editTask(${index})">${item.text}</p>
             </div>
         `;
-        p.querySelector(".todo-checkbox").addEventListener("change", () => {
-            toogleTask(index);
-        });
-        todoList.appendChild(p);
+    p.querySelector(".todo-checkbox").addEventListener("change", () => {
+      toogleTask(index);
+    });
+    todoList.appendChild(p);
+  });
+  todoCount.textContent = todo.length;
+}
+
+function editTask(index) {
+  const todoItem = document.getElementById(`todo-${index}`);
+  const existingText = todo[index].text;
+  const inputElement = document.createElement("input");
+
+  inputElement.value = existingText;
+  todoItem.replaceWith(inputElement);
+  inputElement.focus();
+
+  inputElement.addEventListener("blur", function () {
+    const updatedText = inputElement.value.trim();
+    if (updatedText) {
+      todo[index].text = updatedText;
+      saveToLocalStorage();
+    }
+    displayTasks();
+  });
+
+  // Agregar evento de escucha para la tecla "Enter"
+  inputElement.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      // Evitar que se ejecute la acción predeterminada del Enter (como agregar un salto de línea)
+      event.preventDefault();
+
+      const updatedText = inputElement.value.trim();
+      if (updatedText) {
+        todo[index].text = updatedText;
+        saveToLocalStorage();
+      }
+      displayTasks();
+    }
   });
 }
 
-
-function editTask(index) {
-    const todoItem = document.getElementById(`todo-${index}`);
-    const existingText = todo[index].text;
-    const inputElement = document.createElement("input");
-
-    inputElement.value = existingText;
-    todoItem.replaceWith(inputElement);
-    inputElement.focus();
-
-    inputElement.addEventListener("blur", function () {
-        const updatedText = inputElement.value.trim();
-        if (updatedText) {
-            todo[index].text = updatedText;
-            saveToLocalStorage();
-        }
-        displayTasks();
-    } );
-}
-
-
 function toogleTask(index) {
-    todo[index].disabled = !todo[index].disabled;
-    saveToLocalStorage();
-    displayTasks();
+  todo[index].disabled = !todo[index].disabled;
+  saveToLocalStorage();
+  displayTasks();
 }
 
 function deleteAllTasks() {
-    todo = [];
-    saveToLocalStorage();
-    displayTasks();
+  todo = [];
+  saveToLocalStorage();
+  displayTasks();
 }
 
 function saveToLocalStorage() {
